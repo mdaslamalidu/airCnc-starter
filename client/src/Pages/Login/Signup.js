@@ -1,11 +1,22 @@
 import React, { useContext } from "react";
-
-import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import PrimaryButton from "../../Components/Button/PrimaryButton";
 import { AuthContext } from "../../contexts/AuthProvider";
 
 const Signup = () => {
-  // const { createUser } = useContext(AuthContext);
+  const {
+    createUser,
+    updateUserProfile,
+    verifyEmail,
+    signInWithGoogle,
+    setLoading,
+    loading,
+  } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -13,7 +24,7 @@ const Signup = () => {
     const email = event.target.email.value;
     const image = event.target.image.files[0];
     const password = event.target.password.value;
-
+    console.log(email);
     const formData = new FormData();
     formData.append("image", image);
 
@@ -24,7 +35,39 @@ const Signup = () => {
       body: formData,
     })
       .then((res) => res.json())
-      .then((data) => console.log(data.data.display_url));
+      .then((data) => {
+        console.log(data.data.display_url);
+        createUser(email, password)
+          .then((result) => {
+            console.log(result.user);
+            updateUserProfile(name, data.data.display_url)
+              .then(() => {
+                toast.success("update your profile");
+              })
+              .then(() => {
+                verifyEmail().then(() => {
+                  toast.success("check your email for varification");
+                  navigate(from, { replace: true });
+                });
+              })
+              .catch((error) => console.log(error))
+              .catch((error) => {
+                console.log(error);
+              });
+          })
+          .catch((error) => console.log(error));
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const handleGoogleSingin = () => {
+    signInWithGoogle()
+      .then((result) => {
+        console.log(result.user);
+        toast.success("google sign in Success");
+        navigate(from, { replace: true });
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -108,7 +151,11 @@ const Signup = () => {
           <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
         </div>
         <div className="flex justify-center space-x-4">
-          <button aria-label="Log in with Google" className="p-3 rounded-sm">
+          <button
+            onClick={handleGoogleSingin}
+            aria-label="Log in with Google"
+            className="p-3 rounded-sm"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 32 32"
