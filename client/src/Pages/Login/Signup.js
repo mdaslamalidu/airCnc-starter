@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import toast from "react-hot-toast";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { SetauthToken } from "../../auth/SetauthToken";
 import PrimaryButton from "../../Components/Button/PrimaryButton";
 import { AuthContext } from "../../contexts/AuthProvider";
 
@@ -40,6 +41,7 @@ const Signup = () => {
         createUser(email, password)
           .then((result) => {
             console.log(result.user);
+            SetauthToken(result.user);
             updateUserProfile(name, data.data.display_url)
               .then(() => {
                 toast.success("update your profile");
@@ -65,6 +67,7 @@ const Signup = () => {
       .then((result) => {
         console.log(result.user);
         toast.success("google sign in Success");
+        SetauthToken(result.user);
         navigate(from, { replace: true });
       })
       .catch((error) => console.log(error));

@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import PrimaryButton from "../../Components/Button/PrimaryButton";
 import { AuthContext } from "../../contexts/AuthProvider";
 import SmallSpinner from "../../Components/Spinner/SmallSpinner";
+import { SetauthToken } from "../../auth/SetauthToken";
 
 const Login = () => {
   const { signin, resetPassword, loading, setLoading, signInWithGoogle } =
@@ -21,6 +22,7 @@ const Login = () => {
       .then((result) => {
         console.log(result.user);
         toast.success("sign in sucessfully");
+        SetauthToken(result.user);
         navigate(from, { replace: true });
       })
       .catch((error) => {
@@ -45,6 +47,7 @@ const Login = () => {
       .then((result) => {
         console.log(result.user);
         toast.success("google sign in Success");
+        SetauthToken(result.user);
         navigate(from, { replace: true });
       })
       .catch((error) => console.log(error));

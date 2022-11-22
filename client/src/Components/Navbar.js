@@ -10,7 +10,9 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout()
-      .then(() => {})
+      .then(() => {
+        return setIsDropdownOpen(false);
+      })
       .catch((error) => console.log(error));
   };
 
