@@ -13,8 +13,16 @@ export const saveBookings = async (booking) => {
   return data;
 };
 
-export const getAllBookings = async (email) => {
+export const getAllBookingsByEmail = async (email) => {
   const url = `http://localhost:8000/bookings?email=${email}`;
+
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+};
+
+export const getAllBookings = async () => {
+  const url = "http://localhost:8000/bookings";
 
   const response = await fetch(url);
   const data = await response.json();
