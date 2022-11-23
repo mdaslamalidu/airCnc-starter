@@ -75,6 +75,12 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/users", async (req, res) => {
+      let query = {};
+      const result = await usersCollection.find(query).toArray();
+      res.send(result);
+    });
+
     console.log("Database Connected...");
   } finally {
   }
