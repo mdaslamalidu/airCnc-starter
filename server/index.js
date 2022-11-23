@@ -81,6 +81,13 @@ async function run() {
       res.send(result);
     });
 
+    app.post("/homes", async (req, res) => {
+      const query = req.body;
+      const result = await homesCollection.insertOne(query);
+      console.log(result);
+      res.send(result);
+    });
+
     console.log("Database Connected...");
   } finally {
   }
