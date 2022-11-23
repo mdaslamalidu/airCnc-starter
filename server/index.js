@@ -48,6 +48,13 @@ async function run() {
       res.send({ result, token });
     });
 
+    app.get("/users/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const user = await usersCollection.findOne(query);
+      res.send(user);
+    });
+
     app.post("/bookings", async (req, res) => {
       const query = req.body;
       const result = await bookingsCollection.insertOne(query);
